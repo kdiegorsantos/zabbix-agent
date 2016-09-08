@@ -1,0 +1,4 @@
+---
+  - hosts: zabbix-agent
+    roles:
+      - { role: zabbix-agent, when: "ansible_os_family == 'RedHat' or ansible_os_family == 'Solaris'" }

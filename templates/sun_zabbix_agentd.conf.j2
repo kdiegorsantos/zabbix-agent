@@ -1,0 +1,7 @@
+LogFile=/tmp/zabbix_agentd.log
+LogFileSize=1
+Server= {{ zabbix_agent_config_server }}
+ServerActive= {{ zabbix_agent_config_server_active }}
+Hostname= {{ inventory_hostname_short }}
+EnableRemoteCommands=1
+LogRemoteCommands=1
