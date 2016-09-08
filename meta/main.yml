@@ -1,17 +1,19 @@
 ---
+dependencies: []
 galaxy_info:
   author: "Diego R. Santos"
-  license: license (BSD)
+  categories:
+    - monitoring
   description: "Install and configure zabbix-agent on RHEL and Solaris servers and populate zabbix-server"
+  license: "license (BSD)"
   min_ansible_version: 1.7
   platforms:
-   - name: EL
-     versions:
-      - 5
-      - 6
-   - name: Solaris
-     versions:
-      - 10
-   categories:
-   - monitoring
-dependencies: []
+    -
+      name: EL
+      versions:
+        - 5
+        - 6
+    -
+      name: Solaris
+      versions:
+        - 10
