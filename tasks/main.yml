@@ -1,0 +1,148 @@
+---
+# tasks file for zabbix-agent
+- name: "Install zabbix-agent - Phase 1.1 RedHat"
+  copy: src=templates/rhel5_zabbix.repo.j2 dest=/etc/yum.repos.d/zabbix.repo owner=root group=root mode=0644
+  when: ansible_os_family == "RedHat" and ansible_distribution_release == "Tikanga"
+
+- name: "Install zabbix-agent - Phase 1.2 RedHat"
+  copy: src=templates/rhel6_zabbix.repo.j2 dest=/etc/yum.repos.d/zabbix.repo owner=root group=root mode=0644
+  when: ansible_os_family == "RedHat" and ansible_distribution_release == "Santiago"
+
+- name: "Install zabbix-agent - Phase 1.3 RedHat"
+  copy: src=templates/RPM-GPG-KEY-ZABBIX.j2 dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX owner=root group=root mode=0644
+  when: ansible_os_family == "RedHat"
+
+- name: "Install zabbix-agent - Phase 1.4 RedHat"
+  rpm_key: state=present key=/etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX
+  when: ansible_os_family == "RedHat"
+
+- name: "Install zabbix-agent - Phase 1.5 RedHat"
+  yum: name=unixODBC state=latest
+  when: ansible_os_family == "RedHat"
+
+- name: "Install zabbix-agent - Phase 1.6 RedHat"
+  yum: name=zabbix-agent state=latest enablerepo=zabbix
+  when: ansible_os_family == "RedHat"
+
+- name: "Configure zabbix-agent - Phase 2.1 RedHat"
+  template: src=templates/zabbix_agentd.conf.j2 dest=/etc/zabbix/zabbix_agentd.conf
+  when: ansible_os_family == "RedHat"
+
+- name: "Configure zabbix-agent - Phase 2.2 RedHat"
+  copy: src=templates/lld-disks.py dest=/usr/local/bin/ mode=0775
+  when: ansible_os_family == "RedHat" and ansible_distribution_release == "Santiago"
+
+- name: "Configure zabbix-agent - Phase 2.3 RedHat"
+  copy: src=templates/userparameter_diskstats.conf dest=/etc/zabbix/zabbix_agentd.d/ mode=0644
+  when: ansible_os_family == "RedHat" and ansible_distribution_release == "Santiago"
+
+- name: "Configure zabbix-agent - Phase 2.4 RedHat"
+  file: path=/etc/zabbix/zabbix_agentd.d/userparameter_mysql.conf state=absent
+  when: ansible_os_family == "RedHat"
+
+- name: "Configure zabbix-agent - Phase 2.5 RedHat"
+  user: name=zabbix shell=/sbin/nologin groups=zabbix append=yes createhome=yes home=/var/lib/zabbix comment="Zabbix Monitoring System"
+  when: ansible_os_family == "RedHat"
+
+- name: "Configure zabbix-agent - Phase 2.6 RedHat"
+  lineinfile: dest=/etc/sudoers state=absent regexp="^zabbix" backup=yes
+  when: ansible_os_family == "RedHat"
+
+- name: "Configure zabbix-agent - Phase 2.7 RedHat"
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: "zabbix ALL=(root) NOPASSWD: /usr/local/sbin/hadouken.py,/sbin/gabconfig -a,/sbin/lltstat -nvv active,/opt/VRTSvcs/bin/hastatus -summ,/sbin/vxdctl -c mode,/opt/VRTSvcs/bin/hasys -list,/opt/VRTS/bin/vxclustadm -v nidmap,/sbin/powermt display *,/sbin/powermt version,/bin/su - ctmag8p -c /controlm/ctmag8p/ctm/scripts/ag_diag_comm, /usr/local/sbin/boot_device.sh, /bin/df, /bin/mount"
+  when: ansible_os_family == "RedHat"
+
+- name: "Configure zabbix-agent - Phase 2.8 RedHat"
+  lineinfile: dest=/etc/sudoers state=absent line="Defaults    requiretty"
+  when: ansible_os_family == "RedHat"
+
+- name: "Start zabbix-agent - Phase 3.1 RedHat"
+  service: name=zabbix-agent state=running enabled=yes
+  notify: "restart zabbix-agent"
+  when: ansible_os_family == "RedHat"
+
+- name: "Install zabbix-agent - Phase 1.1 Solaris"
+  template: src=templates/sun_zabbix_agentd.conf.j2 dest=/usr/local/etc/zabbix_agentd.conf mode=0664
+  when: ansible_os_family == "Solaris"
+
+- name: "Configure zabbix-agent - Phase 2.1 Solaris"
+  group: name=zabbix state=present
+  when: ansible_os_family == "Solaris"
+
+- name: "Configure zabbix-agent - Phase 2.2 Solaris"
+  user: name=zabbix shell=/bin/false group=zabbix groups=zabbix append=yes createhome=yes home=/var/lib/zabbix comment="Zabbix Monitoring System"
+  when: ansible_os_family == "Solaris"
+
+- name: "Configure zabbix-agent - Phase 2.3 Solaris"
+  copy: src=templates/zabbix-agent dest=/usr/local/etc/
+
+- name: "Configure zabbix-agent - Phase 2.4 Solaris"
+  file: path={{ item }} owner=zabbix group=zabbix mode=0775
+  with_items:
+    - /usr/local/etc/zabbix-agent/bin/zabbix_get
+    - /usr/local/etc/zabbix-agent/bin/zabbix_sender
+    - /usr/local/etc/zabbix-agent/sbin/zabbix_agentd
+  when: ansible_os_family == "Solaris"
+
+- name: "Start zabbix-agent - 3.1 Solaris"
+  shell: args=/usr/local/etc/zabbix-agent/sbin/zabbix_agentd
+  when: ansible_os_family == "Solaris"
+
+- name: "Configure zabbix-server - 4.1 RedHat"
+  local_action:
+    module: zabbix_host
+    server_url: "{{ zabbix_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_pass }}"
+    host_name: "{{ ansible_hostname }}"
+    host_groups: "{{ zabbix_host_groups_rhel }}"
+    link_templates: "{{ zabbix_link_templates_rhel }}"
+    status: "{{ zabbix_host_status }}"
+    state: "{{ zabbix_create_host }}"
+    interfaces:
+      - type: 1
+        main: 1
+        useip: "{{ zabbix_useuip }}"
+        ip: "{{ ansible_default_ipv4.address }}"
+        dns: "{{ ansible_fqdn }}"
+        port: "10050"
+  when:
+    - zabbix_api_use
+    - ansible_os_family == "RedHat"
+
+- name: "Configure zabbix-server - 4.1 Solaris"
+  local_action:
+    module: zabbix_host
+    server_url: "{{ zabbix_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_pass }}"
+    host_name: "{{ ansible_hostname }}"
+    host_groups: "{{ zabbix_host_groups_sun }}"
+    link_templates: "{{ zabbix_link_templates_sun }}"
+    status: "{{ zabbix_host_status }}"
+    state: "{{ zabbix_create_host }}"
+    interfaces:
+      - type: 1
+        main: 1
+        useip: "{{ zabbix_useuip }}"
+        ip: "{{ ansible_default_ipv4.address }}"
+        dns: "{{ ansible_fqdn }}"
+        port: "10050"
+  when:
+    - zabbix_api_use
+    - ansible_os_family == "Solaris"
+
+- name: "Configure zabbix-server - 5.1 RedHat and Solaris"
+  local_action:
+    module: zabbix_hostmacro
+    server_url: "{{ zabbix_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_pass }}"
+    host_name: "{{ inventory_hostname_short }}"
+    macro_name: "{{ item.macro_key }}"
+    macro_value: "{{ item.macro_value }}"
+  with_items: zabbix_macros
+  when: zabbix_api_use and zabbix_macros is defined and item.macro_key is defined

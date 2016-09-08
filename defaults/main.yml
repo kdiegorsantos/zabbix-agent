@@ -1,0 +1,23 @@
+---
+# defaults file for zabbix-agent
+zabbix_agent_config_server: zabbix.internal.timbrasil.com.br
+zabbix_agent_config_server_active: zabbix.internal.timbrasil.com.br
+zabbix_agent_config_hostname: '{{ ansible_fqdn }}'
+
+# zabbix-api
+zabbix_api_use: True
+zabbix_url: "http://zabbix.internal.timbrasil.com.br/zabbix"
+zabbix_api_user: "username"
+zabbix_api_pass: "password"
+zabbix_create_hostgroup: absent
+zabbix_create_host: present
+zabbix_host_status: enabled
+zabbix_useuip: 1
+zabbix_host_groups_rhel:
+  - Linux Servers
+zabbix_link_templates_rhel:
+  - Template OS Linux
+zabbix_host_groups_sun:
+  - Solaris Servers
+zabbix_link_templates_sun:
+  - Template OS Solaris
