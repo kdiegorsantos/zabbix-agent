@@ -12,7 +12,7 @@ We have tasks to:
 
 Requirements
 ------------
-Ansible 1.7 or higher.
+Ansible 2.0 or higher.
 
 
 Role Variables
@@ -70,7 +70,7 @@ See also:
 Installation
 ------------
 
-Install using ansible-galaxy command.
+Install using ansible-galaxy.
 
 ```sh
 $ ansible-galaxy install kdiegorsantos.zabbix-agent
