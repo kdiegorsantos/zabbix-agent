@@ -6,7 +6,7 @@ galaxy_info:
     - monitoring
   description: "Install and configure zabbix-agent on RHEL and Solaris servers and populate zabbix-server"
   license: "license MIT"
-  min_ansible_version: 2.0
+  min_ansible_version: 1.7
   platforms:
     -
       name: EL
@@ -18,4 +18,5 @@ galaxy_info:
       name: Solaris
       versions:
         - 10
-        - 11
+  galaxy_tags:
+    - monitoring

@@ -1,7 +1,7 @@
 zabbix-agent
 ============
 
-This ansible role can be used to install and configure zabbix-agent on RHEL 5/6/7 and Solaris 10/11 servers.
+This ansible role can be used to install and configure zabbix-agent on RHEL 5/6/7 and Solaris 10 servers.
 We have tasks to:
 
 1. install zabbix-agent and dependencies via YUM on RHEL servers.
