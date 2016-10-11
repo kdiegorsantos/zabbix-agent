@@ -2,8 +2,6 @@
 dependencies: []
 galaxy_info:
   author: "Diego R. Santos"
-  categories:
-    - monitoring
   description: "Install and configure zabbix-agent on RHEL and Solaris servers and populate zabbix-server"
   license: "license MIT"
   min_ansible_version: 1.5.4
