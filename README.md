@@ -12,7 +12,7 @@ We have tasks to:
 
 Requirements
 ------------
-Ansible 2.0 or higher.
+Ansible 1.5.4 or higher.
 
 
 Role Variables
