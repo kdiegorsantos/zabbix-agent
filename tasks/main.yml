@@ -29,7 +29,7 @@
   when: ansible_os_family == "RedHat"
 
 - name: "Configure zabbix-agent - Phase 2.2 RedHat"
-  copy: src=templates/lld-disks.py dest=/usr/local/bin/ mode=0775
+  copy: src=templates/disk-mapper.py dest=/usr/local/bin/ mode=0775
   when: ansible_os_family == "RedHat" and ansible_distribution_release == "Santiago"
 
 - name: "Configure zabbix-agent - Phase 2.3 RedHat"
