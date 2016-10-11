@@ -73,7 +73,7 @@ After change the default variables you can run this role using the ansible-playb
 License
 -------
 
-BSD
+This project is licensed under the MIT license. See included LICENSE.md.
 
 
 Author Information
