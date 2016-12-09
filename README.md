@@ -1,4 +1,4 @@
-zabbix-agent
+zabbix-agent - Install ans configure zabbix-agent
 ============
 
 This ansible role can be used to install and configure zabbix-agent on RHEL 5/6/7 and Solaris 10 servers.
