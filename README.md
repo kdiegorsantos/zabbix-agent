@@ -21,7 +21,6 @@ The process happens in five phases.
 
 ## Prerequisites
 
-- ansible 1.4 or higher
 - zabbix-api
 
 You'll need to install zabbix-api to be able to add or update host information on zabbix-server.
@@ -56,18 +55,7 @@ ansible-galaxy install kdiegorsantos.zabbix-agent
 
 ----
 
-## Running
-
-Run this role using the ansible-playbook command.
-
-```bash
-# ansible-playbook /etc/ansible/roles/zabbix-agent/role.yml
-```
-
-
 ## Configuration
-
-- Variables
 
 All variables are set in default/main.yml.
 
@@ -94,9 +82,6 @@ zabbix_link_templates_sun:                          # default template for Solar
 ----
 
 ## Running
-
-Example Playbook
-----------------
 
 Run this role using the ansible-playbook command.
 
