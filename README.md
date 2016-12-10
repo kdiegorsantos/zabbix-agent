@@ -58,9 +58,6 @@ ansible-galaxy install kdiegorsantos.zabbix-agent
 
 ## Running
 
-Example Playbook
-----------------
-
 Run this role using the ansible-playbook command.
 
 ```bash
