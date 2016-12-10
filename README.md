@@ -1,8 +1,8 @@
 **[Technical overview](#technical-overview)** |
 **[Prerequisites](#prerequisites)** |
 **[Installation](#installation)** |
-**[Running](#running)** |
 **[Configuration](#configuration)** |
+**[Running](#running)** |
 **[License](#license)**
 
 # [zabbix-agent](https://github.com/kdiegorsantos/zabbix-agent)
