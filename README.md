@@ -1,24 +1,79 @@
-zabbix-agent - Install and configure zabbix-agent
-============
+**[Technical overview](#technical-overview)** |
+**[Prerequisites](#prerequisites)** |
+**[Installation](#installation)** |
+**[Running](#running)** |
+**[Configuration](#configuration)** |
+**[License](#license)**
 
-This ansible role can be used to install and configure zabbix-agent on RHEL 5/6/7 and Solaris 10 servers.
-We have tasks to:
+# [zabbix-agent](https://github.com/kdiegorsantos/zabbix-agent)
 
-1. install zabbix-agent and dependencies via YUM on RHEL servers.
-2. Deploy the zabbix-agent binary to Solaris servers.
-3. Configure zabbix-agent parameters.
-3. Start and manage zabbix-agent service.
-4. Add or update the zabbix-agent host on the zabbix-server via API.
+This ansible role install and configure zabbix-agent on Red Hat Enterprise Linux and Oracle Solaris servers.
 
-Requirements
-------------
-Ansible 1.5.4 or higher.
+The process happens in five phases.
+
+- Install zabbix-agent and dependencies via yum package manager on Red Hat Enterprise Linux
+- Deploy the zabbix-agent binary to Oracle Solaris servers
+- Configure zabbix-agent parameters
+- Start and configure zabbix-agent init services
+- Add or update the zabbix-agent host on the zabbix-server via zabbix-api
+
+----
+
+## Prerequisites
+
+- ansible 1.4 or higher
+- zabbix-api
+
+You'll need to install zabbix-api to be able to add or update host information on zabbix-server.
+
+Installation:
+```bash
+pip install zabbix-api
+```
+
+Short example:
+
+```python
+>>> from zabbix_api import ZabbixAPI
+>>> zapi = ZabbixAPI(server="https://server/")
+>>> zapi.login("login", "password")
+>>> zapi.trigger.get({"expandExpression": "extend", "triggerids": range(0, 100)})
+```
+
+See also:
+- http://www.zabbix.com/wiki/doc/api
+- https://www.zabbix.com/documentation/3.0/manual/api
+- http://www.zabbix.com/forum/showthread.php?t=15218
+
+----
+
+## Installation
+
+Install using ansible-galaxy.
+
+```bash
+ansible-galaxy install kdiegorsantos.zabbix-agent
+```
+
+----
+
+## Running
+
+Example Playbook
+----------------
+
+Run this role using the ansible-playbook command.
+
+```bash
+# ansible-playbook /etc/ansible/roles/zabbix-agent/role.yml
+```
 
 
-Role Variables
---------------
+## Configuration
 
-All variables are set in default\main.yml.
+- Variables
+
+All variables are set in default/main.yml.
 
 ```yaml
 # zabbix-api
@@ -40,61 +95,21 @@ zabbix_link_templates_sun:                          # default template for Solar
   - Template OS Solaris
 ```
 
+----
 
-
-Dependencies
-------------
-
-You'll need to install zabbix-api to be able to add or update host information on zabbix-server.
-
-Installation:
-```sh
-# pip install zabbix-api
-```
-
-Short example:
-
-```python
->>> from zabbix_api import ZabbixAPI
->>> zapi = ZabbixAPI(server="https://server/")
->>> zapi.login("login", "password")
->>> zapi.trigger.get({"expandExpression": "extend", "triggerids": range(0, 100)})
-```
-
-See also:
-* http://www.zabbix.com/wiki/doc/api
-* https://www.zabbix.com/documentation/3.0/manual/api
-* http://www.zabbix.com/forum/showthread.php?t=15218
-
-
-Installation
-------------
-
-Install using ansible-galaxy.
-
-```sh
-$ ansible-galaxy install kdiegorsantos.zabbix-agent
-```
+## Running
 
 Example Playbook
 ----------------
 
-After change the default variables you can run this role using the ansible-playbook command.
+Run this role using the ansible-playbook command.
 
-```sh
-# ansible-playbook /etc/ansible/roles/zabbix-agent/role.yml
+```bash
+ansible-playbook /etc/ansible/roles/zabbix-agent/role.yml
 ```
 
-License
--------
+----
+
+## License
 
 This project is licensed under the MIT license. See included LICENSE.md.
-
-
-Author Information
--------
-
-* Diego R. Santos
-* [github.com](https://github.com/kdiegorsantos)
-
-
