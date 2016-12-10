@@ -26,12 +26,11 @@ The process happens in five phases.
 
 You'll need to install zabbix-api to be able to add or update host information on zabbix-server.
 
-Installation:
 ```bash
 pip install zabbix-api
 ```
 
-Short example:
+Validate access to zabbix server using zabbix-api on python prompt.
 
 ```python
 >>> from zabbix_api import ZabbixAPI
